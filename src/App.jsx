@@ -2,8 +2,10 @@ import React, { Suspense, useEffect, useMemo, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { Bounds, OrbitControls, useBounds, useGLTF } from '@react-three/drei'
 import { Color, DoubleSide, MeshStandardMaterial } from 'three'
+import engineData from './data/engine.json'
 
 const MODEL_URL = '/Engine.glb'
+const DATA_BY_NODE = new Map(engineData.parts.map((part) => [part.node, part]))
 
 function PartModel({ selectedId, hoveredId, onSelect, onHover, onLoaded }) {
   const { scene } = useGLTF(MODEL_URL)
@@ -13,6 +15,7 @@ function PartModel({ selectedId, hoveredId, onSelect, onHover, onLoaded }) {
       if (!object.isMesh) return
       const id = `part-${found.length + 1}`
       const sourceName = object.name || `mesh_${found.length + 1}`
+      const info = DATA_BY_NODE.get(sourceName)
       const geometry = object.geometry
       const triangles = geometry.index
         ? Math.floor(geometry.index.count / 3)
@@ -25,7 +28,16 @@ function PartModel({ selectedId, hoveredId, onSelect, onHover, onLoaded }) {
         roughness: 0.55,
         side: DoubleSide,
       })
-      found.push({ id, label: `Деталь ${found.length + 1}`, sourceName, triangles })
+      found.push({
+        id,
+        label: info?.name || `Деталь ${found.length + 1}`,
+        sourceName,
+        triangles,
+        category: info?.category,
+        description: info?.description,
+        status: info?.status,
+        metrics: info?.metrics || [],
+      })
     })
     return found
   }, [scene])
@@ -38,9 +50,10 @@ function PartModel({ selectedId, hoveredId, onSelect, onHover, onLoaded }) {
       const id = object.userData.partId
       const active = id === selectedId
       const hovered = id === hoveredId
-      object.material.color.set(active ? '#63d6c0' : hovered ? '#d7f4f0' : '#9cabbd')
-      object.material.emissive.set(active ? '#138f82' : hovered ? '#2c5165' : '#000000')
-      object.material.emissiveIntensity = active ? 0.55 : hovered ? 0.22 : 0
+      const attention = DATA_BY_NODE.get(object.name)?.status === 'attention'
+      object.material.color.set(active ? '#63d6c0' : hovered ? '#d7f4f0' : attention ? '#d98d69' : '#9cabbd')
+      object.material.emissive.set(active ? '#138f82' : hovered ? '#2c5165' : attention ? '#763c24' : '#000000')
+      object.material.emissiveIntensity = active ? 0.55 : hovered ? 0.22 : attention ? 0.2 : 0
     })
   }, [scene, selectedId, hoveredId])
 
@@ -128,7 +141,6 @@ export default function App() {
         <div className="topbar-divider" />
         <div className="page-title">Обзор энергоустановки</div>
         <div className="topbar-spacer" />
-        <span className="demo-pill"><span className="demo-dot" />Демо-модель</span>
       </header>
 
       <main className="workspace">
@@ -142,7 +154,7 @@ export default function App() {
             {parts.map((part) => (
               <button
                 key={part.id}
-                className={`part-row ${selectedId === part.id ? 'selected' : ''}`}
+                className={`part-row ${selectedId === part.id ? 'selected' : ''} ${part.status === 'attention' ? 'attention' : ''}`}
                 onClick={() => setSelectedId(part.id)}
               >
                 <span className="part-index">{part.id.replace('part-', '').padStart(2, '0')}</span>
@@ -151,7 +163,6 @@ export default function App() {
               </button>
             ))}
           </div>
-          <div className="side-note"><Icon name="info" size={17} /><p>В GLB детали разделены, но пока имеют технические имена. Переименуем их перед привязкой телеметрии.</p></div>
         </aside>
 
         <section className="viewer-panel" aria-label="Интерактивная 3D-модель">
@@ -170,12 +181,22 @@ export default function App() {
             <div className="details-content">
               <div className="selection-label">ВЫБРАННЫЙ ОБЪЕКТ</div>
               <h1>{selectedPart.label}</h1>
-              <span className="selection-chip"><span />Выбрана в 3D-модели</span>
+              <span className={`selection-chip ${selectedPart.status === 'attention' ? 'attention' : ''}`}><span />{selectedPart.status === 'attention' ? 'Отклонение температуры' : 'Выбрана в 3D-модели'}</span>
+              {selectedPart.description && <p className="part-description">{selectedPart.description}</p>}
               <div className="details-rule" />
+              <div className="selection-label">ПОКАЗАТЕЛИ</div>
+              <div className="metrics-grid">
+                {selectedPart.metrics.map((metric) => (
+                  <div className="metric-card" key={metric.label}>
+                    <span>{metric.label}</span>
+                    <strong>{metric.value.toLocaleString('ru-RU')} <small>{metric.unit}</small></strong>
+                  </div>
+                ))}
+              </div>
+              <div className="details-rule" />
+              {selectedPart.category && <div className="data-row"><span>Узел</span><strong>{selectedPart.category}</strong></div>}
               <div className="data-row"><span>Имя в файле</span><code>{selectedPart.sourceName}</code></div>
               <div className="data-row"><span>Треугольников</span><strong>{selectedPart.triangles.toLocaleString('ru-RU')}</strong></div>
-              <div className="details-rule" />
-              <div className="telemetry-card"><div className="telemetry-icon">↗</div><strong>Телеметрия пока не подключена</strong><p>Позже свяжем эту деталь с датчиками и выведем здесь текущие значения и график.</p></div>
             </div>
           ) : (
             <div className="empty-state"><div className="empty-illustration"><Icon name="target" size={32} /></div><h3>Выберите деталь</h3><p>Нажмите на объект в модели или в списке слева, чтобы посмотреть информацию о нём.</p></div>

@@ -1,0 +1,137 @@
+{
+  "dataMode": "demo",
+  "parts": [
+    {
+      "node": "empty_2",
+      "name": "Блок цилиндров",
+      "category": "Корпус двигателя",
+      "description": "Основа двигателя, в которой расположены цилиндры и каналы охлаждения.",
+      "status": "normal",
+      "metrics": [
+        { "label": "Охлаждающая жидкость", "value": 88, "unit": "°C" },
+        { "label": "Давление масла", "value": 4.2, "unit": "бар" }
+      ]
+    },
+    {
+      "node": "empty_3",
+      "name": "Головка цилиндра 10",
+      "category": "Цилиндр 10",
+      "description": "Головка десятого цилиндра. Температура выхлопа выше, чем у остальных цилиндров.",
+      "status": "attention",
+      "metrics": [
+        { "label": "Температура выхлопа", "value": 526, "unit": "°C" },
+        { "label": "Уровень детонации", "value": 18, "unit": "%" }
+      ]
+    },
+    {
+      "node": "empty_4",
+      "name": "Головка цилиндра 9",
+      "category": "Цилиндр 9",
+      "description": "Головка девятого цилиндра.",
+      "status": "normal",
+      "metrics": [
+        { "label": "Температура выхлопа", "value": 486, "unit": "°C" },
+        { "label": "Уровень детонации", "value": 4, "unit": "%" }
+      ]
+    },
+    {
+      "node": "empty_5",
+      "name": "Головка цилиндра 8",
+      "category": "Цилиндр 8",
+      "description": "Головка восьмого цилиндра.",
+      "status": "normal",
+      "metrics": [
+        { "label": "Температура выхлопа", "value": 479, "unit": "°C" },
+        { "label": "Уровень детонации", "value": 3, "unit": "%" }
+      ]
+    },
+    {
+      "node": "empty_6",
+      "name": "Головка цилиндра 7",
+      "category": "Цилиндр 7",
+      "description": "Головка седьмого цилиндра.",
+      "status": "normal",
+      "metrics": [
+        { "label": "Температура выхлопа", "value": 483, "unit": "°C" },
+        { "label": "Уровень детонации", "value": 5, "unit": "%" }
+      ]
+    },
+    {
+      "node": "empty_7",
+      "name": "Головка цилиндра 6",
+      "category": "Цилиндр 6",
+      "description": "Головка шестого цилиндра.",
+      "status": "normal",
+      "metrics": [
+        { "label": "Температура выхлопа", "value": 491, "unit": "°C" },
+        { "label": "Уровень детонации", "value": 7, "unit": "%" }
+      ]
+    },
+    {
+      "node": "empty_8",
+      "name": "Головка цилиндра 5",
+      "category": "Цилиндр 5",
+      "description": "Головка пятого цилиндра.",
+      "status": "normal",
+      "metrics": [
+        { "label": "Температура выхлопа", "value": 476, "unit": "°C" },
+        { "label": "Уровень детонации", "value": 4, "unit": "%" }
+      ]
+    },
+    {
+      "node": "empty_9",
+      "name": "Головка цилиндра 4",
+      "category": "Цилиндр 4",
+      "description": "Головка четвёртого цилиндра.",
+      "status": "normal",
+      "metrics": [
+        { "label": "Температура выхлопа", "value": 481, "unit": "°C" },
+        { "label": "Уровень детонации", "value": 3, "unit": "%" }
+      ]
+    },
+    {
+      "node": "empty_10",
+      "name": "Головка цилиндра 3",
+      "category": "Цилиндр 3",
+      "description": "Головка третьего цилиндра.",
+      "status": "normal",
+      "metrics": [
+        { "label": "Температура выхлопа", "value": 484, "unit": "°C" },
+        { "label": "Уровень детонации", "value": 5, "unit": "%" }
+      ]
+    },
+    {
+      "node": "empty_11",
+      "name": "Головка цилиндра 2",
+      "category": "Цилиндр 2",
+      "description": "Головка второго цилиндра.",
+      "status": "normal",
+      "metrics": [
+        { "label": "Температура выхлопа", "value": 478, "unit": "°C" },
+        { "label": "Уровень детонации", "value": 4, "unit": "%" }
+      ]
+    },
+    {
+      "node": "empty_12",
+      "name": "Головка цилиндра 1",
+      "category": "Цилиндр 1",
+      "description": "Головка первого цилиндра.",
+      "status": "normal",
+      "metrics": [
+        { "label": "Температура выхлопа", "value": 480, "unit": "°C" },
+        { "label": "Уровень детонации", "value": 4, "unit": "%" }
+      ]
+    },
+    {
+      "node": "empty_13",
+      "name": "Маховик",
+      "category": "Коленчатый вал",
+      "description": "Массивный вращающийся элемент, сглаживающий колебания скорости вращения.",
+      "status": "normal",
+      "metrics": [
+        { "label": "Частота вращения", "value": 1500, "unit": "об/мин" },
+        { "label": "Виброскорость", "value": 2.1, "unit": "мм/с" }
+      ]
+    }
+  ]
+}
